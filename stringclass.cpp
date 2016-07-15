@@ -147,9 +147,14 @@ bool operator==(StringRef a, StringRef b)
 namespace StringOps
 {
 
+static char* allocString(StringSize size)
+{
+    return new char[size + 1];
+}
+
 String add(StringRef a, StringRef b)
 {
-    char *data = new char[a.size() + b.size()];
+    char *data = allocString(a.size() + b.size());
     memcpy(data,            a.data(), a.size());
     memcpy(data + a.size(), b.data(), b.size());
     data[a.size() + b.size()] = '\0';
