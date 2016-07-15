@@ -134,11 +134,28 @@ String::String(String &&other)
     other.mStr = NULL;
 }
 
-
+String operator+(StringRef a, StringRef b)
+{
+    return StringOps::add(a, b);
+}
 
 bool operator==(StringRef a, StringRef b)
 {
     return a.size() == b.size() && !memcmp(a.data(), b.data(), a.size());
+}
+
+namespace StringOps
+{
+
+String add(StringRef a, StringRef b)
+{
+    char *data = new char[a.size() + b.size()];
+    memcpy(data,            a.data(), a.size());
+    memcpy(data + a.size(), b.data(), b.size());
+    data[a.size() + b.size()] = '\0';
+    return String::takeOwnership(data, a.size() + b.size());
+}
+
 }
 
 #if 0
